@@ -395,6 +395,7 @@
         </button>
 
         <h1><i class="fas fa-spa"></i> Sensory Environment Monitor</h1>
+        <p id="welcome-user"></p>
         <p>Calm, real-time monitoring space</p>
     </header>
 
@@ -532,6 +533,8 @@
         applyTheme(next);
     }
 
+    document.getElementById("welcome-user").innerText =
+    "Welcome, " + localStorage.getItem("username");
     (function initTheme() {
         const saved = localStorage.getItem('theme');
         if (saved) {
@@ -687,6 +690,7 @@
     function logout(){
 
         localStorage.removeItem("loggedIn");
+        localStorage.removeItem("username");
 
        window.location.href="index.html";
     }
