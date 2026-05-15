@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autism Sensory Monitor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #8da9c4;
+            --success: #6b9080;
+            --warning: #e9c46a;
+            --danger: #e76f51;
+            --bg: #fdfbf7;
+            --text: #2c3e50;
+            --muted: #607d8b;
+            --card: #ffffff;
+            --surface: #f4f6f8;
+            --surface-2: #e2e8f0;
+            --border: #e2e8f0;
+            --shadow: 0 4px 20px rgba(74, 111, 165, 0.08);
+            --shadow-soft: 0 2px 10px rgba(74, 111, 165, 0.05);
+        }
+
+        body.dark {
+            --bg: #1a202c;
+            --text: #e2e8f0;
+            --muted: #a0aec0;
+            --card: #2d3748;
+            --surface: #283141;
+            --surface-2: #4a5568;
+            --border: rgba(255,255,255,0.1);
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px;
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--muted);
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 10px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .overview-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 30%;
+        }
+
+        .circular-chart {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0%, var(--surface-2) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .circular-chart::before {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--card);
+            border-radius: 50%;
+        }
+
+        .score-text-wrapper {
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .score-big {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--primary);
+        }
+
+        .score-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .score-status-text {
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .metrics-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .metric-value-text {
+            color: var(--text);
+            font-weight: bold;
+        }
+
+        .progress-container {
+            background: var(--surface-2);
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .bar-temp { background: linear-gradient(90deg, #8da9c4, #4a6fa5); }
+        .bar-light { background: linear-gradient(90deg, #ffeaa7, #e9c46a); }
+        .bar-noise { background: linear-gradient(90deg, #f4a261, #e76f51); }
+        .bar-occ { background: linear-gradient(90deg, #a7c957, #6b9080); }
+
+        .alert-box {
+            padding: 18px;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .alert-good {
+            background: rgba(107, 144, 128, 0.15);
+            color: var(--text);
+            border-left: 4px solid var(--success);
+        }
+
+        .alert-bad {
+            background: rgba(231, 111, 81, 0.15);
+            color: var(--text);
+            border-left: 4px solid var(--danger);
+        }
+
+        .chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s;
+            border: none;
+        }
+
+        .chat-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 450px;
+            background-color: var(--card);
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transform-origin: bottom right;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .chat-window.closed {
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .chat-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .chat-header i {
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: var(--surface);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .msg-bot {
+            background-color: var(--surface-2);
+            color: var(--text);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .msg-user {
+            background-color: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 10px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            background: var(--card);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .chat-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .overview-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .score-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .metrics-container {
+                width: 100%;
+            }
+
+            .chat-window {
+                width: 90% !important;
+                right: 5% !important;
+                bottom: 80px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+
+        <button class="theme-toggle" 
+                 style="right:120px;"
+                 onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+        <button class="theme-toggle" id="theme-toggle" type="button" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="theme-icon"></i>
+            <span id="theme-label">Dark</span>
+        </button>
+
+        <h1><i class="fas fa-spa"></i> Sensory Environment Monitor</h1>
+        <p>Calm, real-time monitoring space</p>
+    </header>
+
+    <h2>Room 1: Primary Monitor</h2>
+    <div class="card overview-card">
+        <div class="score-container">
+            <div class="circular-chart" id="score-ring">
+                <div class="score-text-wrapper">
+                    <span class="score-big" id="score-value">--</span>
+                    <span class="score-label">Calm Score</span>
+                </div>
+            </div>
+            <div class="score-status-text" id="status-text">Scanning...</div>
+        </div>
+
+        <div class="metrics-container">
+            <div class="metric-item">
+                <div class="metric-header">
+                    <span><i class="fas fa-thermometer-half"></i> Temperature</span>
+                    <span class="metric-value-text" id="temp-value">--°C</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill bar-temp" id="fill-temp"></div>
+                </div>
+            </div>
+
+            <div class="metric-item">
+                <div class="metric-header">
+                    <span><i class="fas fa-sun"></i> Light Softness</span>
+                    <span class="metric-value-text" id="light-value">--</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill bar-light" id="fill-light"></div>
+                </div>
+            </div>
+
+            <div class="metric-item">
+                <div class="metric-header">
+                    <span><i class="fas fa-volume-up"></i> Sound Level</span>
+                    <span class="metric-value-text" id="noise-value">--</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill bar-noise" id="fill-noise"></div>
+                </div>
+            </div>
+
+            <div class="metric-item">
+                <div class="metric-header">
+                    <span><i class="fas fa-user-friends"></i> Occupancy Status</span>
+                    <span class="metric-value-text" id="occ-value">--</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill bar-occ" id="fill-occ"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-clipboard-check"></i> Comfort Analysis</h3>
+        <div id="recommendations-list">
+            <div class="alert-box alert-good">
+                <i class="fas fa-info-circle"></i> Waiting for live sensor data...
+            </div>
+        </div>
+    </div>
+
+    <h2>Room 2: Radar & Ideal Conditions</h2>
+    <div class="card overview-card" style="padding: 20px;">
+        <div class="metrics-container" style="width: 100%;">
+            <div class="metric-item">
+                <div class="metric-header">
+                    <span><i class="fas fa-thermometer-half" style="color: var(--success)"></i> Temperature (Ideal Template)</span>
+                    <span class="metric-value-text" id="room2-temp">22.0°C</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill bar-temp" style="width: 50%; background: var(--success);"></div>
+                </div>
+            </div>
+            <br>
+            <div class="metric-item">
+                <div class="metric-header">
+                    <span><i class="fas fa-satellite-dish" style="color: var(--primary)"></i> Radar Monitor (Real-Time)</span>
+                    <span class="metric-value-text" id="radar-value" style="font-size: 1.2rem;">Scanning...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="chat-btn" onclick="toggleChat()">
+    <i class="fas fa-comments"></i>
+</button>
+
+<div class="chat-window closed" id="chat-window">
+    <div class="chat-header">
+        <span><i class="fas fa-robot"></i> Sensory Assistant</span>
+        <i class="fas fa-times" onclick="toggleChat()"></i>
+    </div>
+    <div class="chat-body" id="chat-body">
+        <div class="message msg-bot">Hello! Ask me about ideal conditions for autism sensory needs.</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-input" class="chat-input" placeholder="Type a question..." onkeydown="handleEnter(event)">
+        <button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script>
+
+    if(localStorage.getItem("loggedIn") != "true"){
+    window.location.href="/";
+    }   
+
+    function applyTheme(theme) {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        const label = document.getElementById('theme-label');
+
+        if (theme === 'dark') {
+            body.classList.add('dark');
+            icon.className = 'fas fa-sun';
+            label.textContent = 'Day Mode';
+        } else {
+            body.classList.remove('dark');
+            icon.className = 'fas fa-moon';
+            label.textContent = 'Night Mode';
+        }
+    }
+
+    function toggleTheme() {
+        const isDark = document.body.classList.contains('dark');
+        const next = isDark ? 'light' : 'dark';
+        localStorage.setItem('theme', next);
+        applyTheme(next);
+    }
+
+    (function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+            applyTheme(saved);
+            return;
+        }
+        applyTheme('light');
+    })();
+
+    function toggleChat() {
+        const win = document.getElementById('chat-window');
+        win.classList.toggle('closed');
+        if (!win.classList.contains('closed')) {
+            document.getElementById('chat-input').focus();
+        }
+    }
+
+    function handleEnter(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+
+    function sendMessage() {
+        const inputField = document.getElementById('chat-input');
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'user');
+        inputField.value = '';
+
+        setTimeout(() => {
+            addMessage(getBotResponse(text), 'bot');
+        }, 500);
+    }
+
+    function addMessage(text, sender) {
+        const body = document.getElementById('chat-body');
+        const div = document.createElement('div');
+        div.className = `message msg-${sender}`;
+        div.innerText = text;
+        body.appendChild(div);
+        body.scrollTop = body.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+        const lower = input.toLowerCase();
+
+        if (lower.includes('temp')) {
+            return "A stable temperature around 20°C to 23°C is usually more comfortable for a sensory-friendly room.";
+        }
+        if (lower.includes('light')) {
+            return "Soft, non-flickering light is better. Very bright or very dark rooms may feel uncomfortable.";
+        }
+        if (lower.includes('sound') || lower.includes('noise')) {
+            return "A quieter room usually helps reduce sensory overload.";
+        }
+        if (lower.includes('score') || lower.includes('calm')) {
+            return "The calm score shows how sensory-friendly Room 1 is based on temperature, light, sound, and occupancy.";
+        }
+        if (lower.includes('radar')) {
+            return "The radar checks movement in Room 2. Room 2 acts as the template for a calm room.";
+        }
+        if (lower.includes('hi') || lower.includes('hello')) {
+            return "Hello! Ask me about temperature, light, sound, calm score, or radar.";
+        }
+
+        return "I can answer about temperature, light, sound, calm status, and radar monitoring.";
+    }
+
+    function updateComfortAnalysis(data, score) {
+        const list = document.getElementById('recommendations-list');
+        let reasons = [];
+
+        if (data.temp > 27) reasons.push("Room 1 is getting warm.");
+        if (data.temp < 21) reasons.push("Room 1 is getting cold.");
+        if (data.sound > 1200) reasons.push("Room 1 is too loud.");
+        if (data.light > 3000) reasons.push("Bright light detected in Room 1.");
+        if (data.light < 200) reasons.push("Room 1 is too dark.");
+        if (data.motion === 1) reasons.push("Room 1 is occupied.");
+        if (data.radar === 1) reasons.push("Movement detected in Room 2.");
+
+        list.innerHTML = "";
+
+        if (reasons.length === 0) {
+            list.innerHTML = '<div class="alert-box alert-good"><i class="fas fa-check-circle"></i> Room 1 is sensory safe and comfortable.</div>';
+        } else {
+            reasons.forEach(reason => {
+                list.innerHTML += `<div class="alert-box alert-bad"><i class="fas fa-hand-paper"></i> ${reason}</div>`;
+            });
+        }
+    }
+
+    function fetchLiveData() {
+        fetch('/data')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('temp-value').innerText = data.temp.toFixed(1) + "°C";
+                document.getElementById('fill-temp').style.width =
+                    Math.min(Math.max(((data.temp - 15) / 20) * 100, 0), 100) + "%";
+
+                document.getElementById('light-value').innerText = data.light;
+                document.getElementById('fill-light').style.width =
+                    Math.min((data.light / 4095) * 100, 100) + "%";
+
+                document.getElementById('noise-value').innerText = data.sound;
+                document.getElementById('fill-noise').style.width =
+                    Math.min((data.sound / 2000) * 100, 100) + "%";
+
+                document.getElementById('occ-value').innerText =
+                    data.motion === 1 ? "Occupied" : "Empty";
+                document.getElementById('fill-occ').style.width =
+                    data.motion === 1 ? "100%" : "0%";
+
+                const score = data.room1Score;
+                document.getElementById('score-value').innerText = score;
+
+                const statusText = document.getElementById('status-text');
+                const scoreRing = document.getElementById('score-ring');
+
+                let color = "#6b9080";
+                if (score >= 80) {
+                    statusText.innerText = "Environment is Calm";
+                    color = "#6b9080";
+                } else if (score >= 50) {
+                    statusText.innerText = "Moderate";
+                    color = "#e9c46a";
+                } else {
+                    statusText.innerText = "Not Calm";
+                    color = "#e76f51";
+                }
+
+                statusText.style.color = color;
+                scoreRing.style.background = `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
+
+                const radarText = document.getElementById('radar-value');
+                if (data.radar === 1) {
+                    radarText.innerText = "Movement Detected!";
+                    radarText.style.color = "var(--danger)";
+                } else {
+                    radarText.innerText = "All Clear / Safe";
+                    radarText.style.color = "var(--success)";
+                }
+
+                updateComfortAnalysis(data, score);
+            })
+            .catch(err => {
+                console.log("Waiting for ESP32...", err);
+            });
+    }
+
+    fetchLiveData();
+    setInterval(fetchLiveData, 300);
+
+    function logout(){
+
+        localStorage.removeItem("loggedIn");
+
+       window.location.href="index.html";
+    }
+</script>
+</body>
+</html>
