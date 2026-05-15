@@ -401,6 +401,14 @@
     </header>
 
     <h2>Room 1: Primary Monitor</h2>
+    <div class="card" id="live-alert-card">
+    <h3><i class="fas fa-bell"></i> Live Alert Status</h3>
+
+    <div class="alert-box alert-good" id="live-alert-box">
+        <i class="fas fa-check-circle"></i>
+        Environment Stable
+    </div>
+    </div>
     <div class="card overview-card">
         <div class="score-container">
             <div class="circular-chart" id="score-ring">
@@ -635,6 +643,28 @@
         fetch('/data')
             .then(res => res.json())
             .then(data => {
+                const alertBox = document.getElementById("live-alert-box");
+
+            if(data.sound > 1200){
+                alertBox.className = "alert-box alert-bad";
+                alertBox.innerHTML =
+                '<i class="fas fa-volume-up"></i> High Noise Level Detected';
+            }
+            else if(data.light > 3000){
+                alertBox.className = "alert-box alert-bad";
+                alertBox.innerHTML =
+                '<i class="fas fa-sun"></i> Bright Light Detected';
+            }
+            else if(data.temp > 27){
+                alertBox.className = "alert-box alert-bad";
+                alertBox.innerHTML =
+                '<i class="fas fa-temperature-high"></i> High Temperature Detected';
+            }
+            else{
+                alertBox.className = "alert-box alert-good";
+                alertBox.innerHTML =
+                '<i class="fas fa-check-circle"></i> Environment Stable';
+            }
                 const currentTime = new Date().toLocaleTimeString();
 
             if(labels.length > 10){
