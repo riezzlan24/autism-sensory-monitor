@@ -377,6 +377,7 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -485,7 +486,11 @@
         </div>
     </div>
 </div>
+<div class="card">
+    <h3><i class="fas fa-chart-line"></i> Live Environment Graph</h3>
 
+    <canvas id="sensorChart" height="100"></canvas>
+</div>
 <button class="chat-btn" onclick="toggleChat()">
     <i class="fas fa-comments"></i>
 </button>
@@ -630,6 +635,20 @@
         fetch('/data')
             .then(res => res.json())
             .then(data => {
+                const currentTime = new Date().toLocaleTimeString();
+
+            if(labels.length > 10){
+                labels.shift();
+                tempData.shift();
+                soundData.shift();
+}
+
+                labels.push(currentTime);
+                tempData.push(data.temp);
+                soundData.push(data.sound);
+
+                sensorChart.update();
+
                 document.getElementById('temp-value').innerText = data.temp.toFixed(1) + "°C";
                 document.getElementById('fill-temp').style.width =
                     Math.min(Math.max(((data.temp - 15) / 20) * 100, 0), 100) + "%";
@@ -684,6 +703,41 @@
             });
     }
 
+const labels = [];
+const tempData = [];
+const soundData = [];
+
+const ctx = document.getElementById('sensorChart').getContext('2d');
+
+const sensorChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Temperature',
+                data: tempData,
+                borderWidth: 2,
+                tension: 0.3
+            },
+            {
+                label: 'Sound',
+                data: soundData,
+                borderWidth: 2,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        animation: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
     fetchLiveData();
     setInterval(fetchLiveData, 300);
 
