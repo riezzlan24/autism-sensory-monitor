@@ -641,12 +641,13 @@
                 labels.shift();
                 tempData.shift();
                 soundData.shift();
+                lightData.shift();
 }
 
                 labels.push(currentTime);
                 tempData.push(data.temp);
                 soundData.push(data.sound);
-
+                lightData.push(data.light);
                 sensorChart.update();
 
                 document.getElementById('temp-value').innerText = data.temp.toFixed(1) + "°C";
@@ -706,6 +707,7 @@
 const labels = [];
 const tempData = [];
 const soundData = [];
+const lightData = [];
 
 const ctx = document.getElementById('sensorChart').getContext('2d');
 
@@ -725,7 +727,13 @@ const sensorChart = new Chart(ctx, {
                 data: soundData,
                 borderWidth: 2,
                 tension: 0.3
-            }
+            },
+            {
+                label: 'Light',
+                data: lightData,
+                borderWidth: 2,
+                tension: 0.3
+            },
         ]
     },
     options: {
