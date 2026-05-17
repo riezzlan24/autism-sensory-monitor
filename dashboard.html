@@ -378,6 +378,8 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -550,6 +552,21 @@
 
 <script>
 
+        const firebaseConfig = {
+        apiKey: "AIzaSyDmHts-DzWTly-45_ln9tHwVGKIyZAptPw",
+        authDomain: "autisense-3c985.firebaseapp.com",
+        databaseURL: "https://autisense-3c985-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "autisense-3c985",
+        storageBucket: "autisense-3c985.firebasestorage.app",
+        messagingSenderId: "532708826652",
+        appId: "1:532708826652:web:02459a772b54da1d3149d9"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const db = firebase.database();
+
+
     if(localStorage.getItem("loggedIn") != "true"){
     window.location.href="/";
     }   
@@ -670,162 +687,63 @@
         }
     }
 
-    function fetchLiveData() {
-        fetch('/data')
-            .then(res => res.json())
-            .then(data => {
-                const alertBox = document.getElementById("live-alert-box");
+    db.ref("room1").on("value", (snapshot) => {
 
-            if(data.sound > 1200){
-                alertBox.className = "alert-box alert-bad";
-                alertBox.innerHTML =
-                '<i class="fas fa-volume-up"></i> High Noise Level Detected';
-            }
-            else if(data.light > 3000){
-                alertBox.className = "alert-box alert-bad";
-                alertBox.innerHTML =
-                '<i class="fas fa-sun"></i> Bright Light Detected';
-            }
-            else if(data.temp > 27){
-                alertBox.className = "alert-box alert-bad";
-                alertBox.innerHTML =
-                '<i class="fas fa-temperature-high"></i> High Temperature Detected';
-            }
-            else{
-                alertBox.className = "alert-box alert-good";
-                alertBox.innerHTML =
-                '<i class="fas fa-check-circle"></i> Environment Stable';
-            }
-                const currentTime = new Date().toLocaleTimeString();
+    const data = snapshot.val();
 
-            if(labels.length > 10){
-                labels.shift();
-                tempData.shift();
-                soundData.shift();
-                lightData.shift();
-}
+    if(!data) return;
 
-                labels.push(currentTime);
-                tempData.push(data.temp);
-                soundData.push(data.sound);
-                lightData.push(data.light);
-                sensorChart.update();
+    document.getElementById('temp-value').innerText =
+    data.temperature.toFixed(1) + "°C";
 
-                document.getElementById('temp-value').innerText = data.temp.toFixed(1) + "°C";
-                document.getElementById('fill-temp').style.width =
-                    Math.min(Math.max(((data.temp - 15) / 20) * 100, 0), 100) + "%";
+    document.getElementById('fill-temp').style.width =
+    Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
 
-                document.getElementById('light-value').innerText = data.light;
-                document.getElementById('fill-light').style.width =
-                    Math.min((data.light / 4095) * 100, 100) + "%";
+    document.getElementById('light-value').innerText = data.light;
 
-                document.getElementById('noise-value').innerText = data.sound;
-                document.getElementById('fill-noise').style.width =
-                    Math.min((data.sound / 2000) * 100, 100) + "%";
+    document.getElementById('fill-light').style.width =
+    Math.min((data.light / 4095) * 100, 100) + "%";
 
-                document.getElementById('occ-value').innerText =
-                    data.motion === 1 ? "Occupied" : "Empty";
-                document.getElementById('fill-occ').style.width =
-                    data.motion === 1 ? "100%" : "0%";
+    document.getElementById('noise-value').innerText = data.sound;
 
-                const score = data.room1Score;
-                                scoreHistory.push(score);
+    document.getElementById('fill-noise').style.width =
+    Math.min((data.sound / 2000) * 100, 100) + "%";
 
-                if(scoreHistory.length > 20){
-                    scoreHistory.shift();
-                }
+    document.getElementById('occ-value').innerText =
+    data.motion === 1 ? "Occupied" : "Empty";
 
-                const maxScore = Math.max(...scoreHistory);
-                const minScore = Math.min(...scoreHistory);
+    document.getElementById('fill-occ').style.width =
+    data.motion === 1 ? "100%" : "0%";
 
-                const avgScore =
-                
-                scoreHistory.reduce((a,b)=>a+b,0) / scoreHistory.length;
+    const score = data.room1Score;
 
-                document.getElementById("max-score").innerText = maxScore;
-                document.getElementById("min-score").innerText = minScore;
-                document.getElementById("avg-score").innerText =
-                avgScore.toFixed(1);
-                document.getElementById('score-value').innerText = score;
+    document.getElementById('score-value').innerText = score;
 
-                const statusText = document.getElementById('status-text');
-                const scoreRing = document.getElementById('score-ring');
+    const statusText = document.getElementById('status-text');
 
-                let color = "#6b9080";
-                if (score >= 80) {
-                    statusText.innerText = "Environment is Calm";
-                    color = "#6b9080";
-                } else if (score >= 50) {
-                    statusText.innerText = "Moderate";
-                    color = "#e9c46a";
-                } else {
-                    statusText.innerText = "Not Calm";
-                    color = "#e76f51";
-                }
+    const scoreRing = document.getElementById('score-ring');
 
-                statusText.style.color = color;
-                scoreRing.style.background = `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
+    let color = "#6b9080";
 
-                const radarText = document.getElementById('radar-value');
-                if (data.radar === 1) {
-                    radarText.innerText = "Movement Detected!";
-                    radarText.style.color = "var(--danger)";
-                } else {
-                    radarText.innerText = "All Clear / Safe";
-                    radarText.style.color = "var(--success)";
-                }
-
-                updateComfortAnalysis(data, score);
-            })
-            .catch(err => {
-                console.log("Waiting for ESP32...", err);
-            });
+    if (score >= 80) {
+        statusText.innerText = "Environment is Calm";
+        color = "#6b9080";
+    }
+    else if (score >= 50) {
+        statusText.innerText = "Moderate";
+        color = "#e9c46a";
+    }
+    else {
+        statusText.innerText = "Not Calm";
+        color = "#e76f51";
     }
 
-const labels = [];
-const tempData = [];
-const soundData = [];
-const lightData = [];
-const scoreHistory = [];
-const ctx = document.getElementById('sensorChart').getContext('2d');
+    statusText.style.color = color;
 
-const sensorChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Temperature',
-                data: tempData,
-                borderWidth: 2,
-                tension: 0.3
-            },
-            {
-                label: 'Sound',
-                data: soundData,
-                borderWidth: 2,
-                tension: 0.3
-            },
-            {
-                label: 'Light',
-                data: lightData,
-                borderWidth: 2,
-                tension: 0.3
-            },
-        ]
-    },
-    options: {
-        responsive: true,
-        animation: false,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
+    scoreRing.style.background =
+    `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
+
 });
-    fetchLiveData();
-    setInterval(fetchLiveData, 300);
 
     function logout(){
 
