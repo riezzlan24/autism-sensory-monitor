@@ -494,11 +494,42 @@
         </div>
     </div>
 </div>
+
 <div class="card">
     <h3><i class="fas fa-chart-line"></i> Live Environment Graph</h3>
 
     <canvas id="sensorChart" height="100"></canvas>
 </div>
+
+<div class="card">
+    <h3><i class="fas fa-chart-pie"></i> Calm Score Analytics</h3>
+
+    <div class="metrics-container">
+
+        <div class="metric-item">
+            <div class="metric-header">
+                <span>Highest Calm Score</span>
+                <span class="metric-value-text" id="max-score">--</span>
+            </div>
+        </div>
+
+        <div class="metric-item">
+            <div class="metric-header">
+                <span>Lowest Calm Score</span>
+                <span class="metric-value-text" id="min-score">--</span>
+            </div>
+        </div>
+
+        <div class="metric-item">
+            <div class="metric-header">
+                <span>Average Calm Score</span>
+                <span class="metric-value-text" id="avg-score">--</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <button class="chat-btn" onclick="toggleChat()">
     <i class="fas fa-comments"></i>
 </button>
@@ -698,6 +729,23 @@
                     data.motion === 1 ? "100%" : "0%";
 
                 const score = data.room1Score;
+                                scoreHistory.push(score);
+
+                if(scoreHistory.length > 20){
+                    scoreHistory.shift();
+                }
+
+                const maxScore = Math.max(...scoreHistory);
+                const minScore = Math.min(...scoreHistory);
+
+                const avgScore =
+                
+                scoreHistory.reduce((a,b)=>a+b,0) / scoreHistory.length;
+
+                document.getElementById("max-score").innerText = maxScore;
+                document.getElementById("min-score").innerText = minScore;
+                document.getElementById("avg-score").innerText =
+                avgScore.toFixed(1);
                 document.getElementById('score-value').innerText = score;
 
                 const statusText = document.getElementById('status-text');
@@ -738,7 +786,7 @@ const labels = [];
 const tempData = [];
 const soundData = [];
 const lightData = [];
-
+const scoreHistory = [];
 const ctx = document.getElementById('sensorChart').getContext('2d');
 
 const sensorChart = new Chart(ctx, {
