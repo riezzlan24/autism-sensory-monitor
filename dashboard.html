@@ -692,7 +692,6 @@
     const chartLabels = [];
     const tempData = [];
     const soundData = [];
-    const lightData = [];
 
 const ctx = document.getElementById('sensorChart').getContext('2d');
 
@@ -720,16 +719,6 @@ const sensorChart = new Chart(ctx, {
                 pointRadius: 3,
                 pointHoverRadius: 5,
                 yAxisID: 'y1'
-            },
-            {
-                label: 'Light',
-                data: lightData,
-                borderWidth: 2,
-                tension: 0.4,
-                fill: false,
-                pointRadius: 3,
-                pointHoverRadius: 5,
-                yAxisID: 'y2'
             }
         ]
     },
@@ -758,16 +747,6 @@ const sensorChart = new Chart(ctx, {
                     drawOnChartArea: false
                 }
             },
-
-            y2: {
-                type: 'linear',
-                position: 'right',
-                min: 0,
-                max: 4095,
-                grid: {
-                    drawOnChartArea: false
-                }
-            }
         }
     }
 });
@@ -852,14 +831,12 @@ if (scoreHistory.length > 20) {
     chartLabels.push(currentTime);
     tempData.push(data.temperature);
     soundData.push(data.sound);
-    lightData.push(data.light);
 
     if (chartLabels.length > 10) {
 
         chartLabels.shift();
         tempData.shift();
         soundData.shift();
-        lightData.shift();
     }
 
     sensorChart.update();
