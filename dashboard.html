@@ -566,6 +566,8 @@
 
         const db = firebase.database();
 
+        const scoreHistory = [];
+
 
     if(localStorage.getItem("loggedIn") != "true"){
     window.location.href="/";
@@ -687,6 +689,37 @@
         }
     }
 
+    const chartLabels = [];
+const tempData = [];
+const soundData = [];
+
+const ctx = document.getElementById('sensorChart').getContext('2d');
+
+const sensorChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: chartLabels,
+        datasets: [
+            {
+                label: 'Temperature',
+                data: tempData,
+                borderWidth: 2,
+                tension: 0.3
+            },
+            {
+                label: 'Sound',
+                data: soundData,
+                borderWidth: 2,
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true
+    }
+});
+
     db.ref("room1").on("value", (snapshot) => {
 
     const data = snapshot.val();
@@ -720,6 +753,22 @@
 
     const score = data.score;
 
+    scoreHistory.push(score);
+
+if (scoreHistory.length > 20) {
+    scoreHistory.shift();
+}
+
+    const maxScore = Math.max(...scoreHistory);
+    const minScore = Math.min(...scoreHistory);
+
+    const avgScore =
+    (scoreHistory.reduce((a, b) => a + b, 0) / scoreHistory.length).toFixed(1);
+
+    document.getElementById('max-score').innerText = maxScore;
+    document.getElementById('min-score').innerText = minScore;
+    document.getElementById('avg-score').innerText = avgScore;
+
     document.getElementById('score-value').innerText = score;
 
     const statusText = document.getElementById('status-text');
@@ -745,6 +794,22 @@
 
     scoreRing.style.background =
     `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
+
+    const currentTime = new Date().toLocaleTimeString();
+
+    chartLabels.push(currentTime);
+    tempData.push(data.temperature);
+    soundData.push(data.sound);
+
+    if (chartLabels.length > 10) {
+
+        chartLabels.shift();
+        tempData.shift();
+        soundData.shift();
+    }
+
+    sensorChart.update();
+
 
     updateComfortAnalysis(data, score);
 });
