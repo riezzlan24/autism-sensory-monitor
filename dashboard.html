@@ -668,8 +668,8 @@
         const list = document.getElementById('recommendations-list');
         let reasons = [];
 
-        if (data.temp > 27) reasons.push("Room 1 is getting warm.");
-        if (data.temp < 21) reasons.push("Room 1 is getting cold.");
+        if (data.temperature > 27) reasons.push("Room 1 is getting warm.");
+        if (data.temperature < 21) reasons.push("Room 1 is getting cold.");
         if (data.sound > 1200) reasons.push("Room 1 is too loud.");
         if (data.light > 3000) reasons.push("Bright light detected in Room 1.");
         if (data.light < 200) reasons.push("Room 1 is too dark.");
@@ -715,7 +715,10 @@
     document.getElementById('fill-occ').style.width =
     data.motion === 1 ? "100%" : "0%";
 
-    const score = data.room1Score;
+    document.getElementById('radar-value').innerText =
+    data.radar === 1 ? "Movement Detected" : "No Movement";
+
+    const score = data.score;
 
     document.getElementById('score-value').innerText = score;
 
@@ -743,6 +746,7 @@
     scoreRing.style.background =
     `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
 
+    updateComfortAnalysis(data, score);
 });
 
     function logout(){
