@@ -690,8 +690,8 @@
     }
 
     const chartLabels = [];
-const tempData = [];
-const soundData = [];
+    const tempData = [];
+    const soundData = [];
 
 const ctx = document.getElementById('sensorChart').getContext('2d');
 
@@ -704,19 +704,50 @@ const sensorChart = new Chart(ctx, {
                 label: 'Temperature',
                 data: tempData,
                 borderWidth: 2,
-                tension: 0.3
+                tension: 0.4,
+                fill:false,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                yAxisID: 'y'
             },
             {
                 label: 'Sound',
                 data: soundData,
                 borderWidth: 2,
-                tension: 0.3
+                tension: 0.4,
+                fill:   false,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                yAxisID: 'y1'
             }
         ]
     },
     options: {
         responsive: true,
-        maintainAspectRatio: true
+        maintainAspectRatio: true,
+
+        animation: {
+            duration: 800,
+        },
+
+        scales: {
+            y: {
+                type: 'linear',
+                position: 'left',
+                min: 0,
+                max: 40
+            },
+
+            y1: {
+                type: 'linear',
+                position: 'right',
+                min: 0,
+                max: 2000,
+                grid: {
+                    drawOnChartArea: false
+                }
+            }
+        }
     }
 });
 
