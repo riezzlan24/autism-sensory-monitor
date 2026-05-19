@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autism Sensory Monitor</title>
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
+
         :root {
+
             --primary: #4a6fa5;
             --secondary: #8da9c4;
             --success: #6b9080;
@@ -26,6 +30,7 @@
         }
 
         body.dark {
+
             --bg: #1a202c;
             --text: #e2e8f0;
             --muted: #a0aec0;
@@ -37,6 +42,7 @@
         }
 
         body {
+
             font-family: 'Open Sans', sans-serif;
             background-color: var(--bg);
             margin: 0;
@@ -47,30 +53,35 @@
         }
 
         .container {
+
             max-width: 1000px;
             margin: 0 auto;
             padding-bottom: 80px;
         }
 
         header {
+
             text-align: center;
             margin-bottom: 40px;
             position: relative;
         }
 
         h1 {
+
             color: var(--primary);
             font-weight: 700;
             margin-bottom: 8px;
         }
 
         header p {
+
             color: var(--muted);
             margin-top: 0;
             font-size: 1.1rem;
         }
 
         .theme-toggle {
+
             position: absolute;
             right: 0;
             top: 0;
@@ -87,6 +98,7 @@
         }
 
         .card {
+
             background: var(--card);
             border-radius: 20px;
             padding: 30px;
@@ -96,6 +108,7 @@
         }
 
         .overview-card {
+
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -103,6 +116,7 @@
         }
 
         .score-container {
+
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -111,6 +125,7 @@
         }
 
         .circular-chart {
+
             width: 180px;
             height: 180px;
             border-radius: 50%;
@@ -123,6 +138,7 @@
         }
 
         .circular-chart::before {
+
             content: "";
             position: absolute;
             width: 150px;
@@ -132,6 +148,7 @@
         }
 
         .score-text-wrapper {
+
             z-index: 10;
             text-align: center;
             display: flex;
@@ -139,6 +156,7 @@
         }
 
         .score-big {
+
             font-size: 3.5rem;
             font-weight: 700;
             line-height: 1;
@@ -146,6 +164,7 @@
         }
 
         .score-label {
+
             font-size: 0.85rem;
             color: var(--muted);
             text-transform: uppercase;
@@ -155,6 +174,7 @@
         }
 
         .score-status-text {
+
             margin-top: 15px;
             font-weight: 600;
             font-size: 1.1rem;
@@ -163,6 +183,7 @@
         }
 
         .metrics-container {
+
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -170,12 +191,14 @@
         }
 
         .metric-item {
+
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
 
         .metric-header {
+
             display: flex;
             justify-content: space-between;
             font-size: 14px;
@@ -184,11 +207,13 @@
         }
 
         .metric-value-text {
+
             color: var(--text);
             font-weight: bold;
         }
 
         .progress-container {
+
             background: var(--surface-2);
             height: 14px;
             border-radius: 7px;
@@ -197,561 +222,273 @@
         }
 
         .progress-fill {
+
             height: 100%;
             width: 0%;
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .bar-temp { background: linear-gradient(90deg, #8da9c4, #4a6fa5); }
+
         .bar-light { background: linear-gradient(90deg, #ffeaa7, #e9c46a); }
+
         .bar-noise { background: linear-gradient(90deg, #f4a261, #e76f51); }
+
         .bar-occ { background: linear-gradient(90deg, #a7c957, #6b9080); }
 
-        .alert-box {
-            padding: 18px;
-            margin-top: 10px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            border: 1px solid var(--border);
-        }
-
-        .alert-good {
-            background: rgba(107, 144, 128, 0.15);
-            color: var(--text);
-            border-left: 4px solid var(--success);
-        }
-
-        .alert-bad {
-            background: rgba(231, 111, 81, 0.15);
-            color: var(--text);
-            border-left: 4px solid var(--danger);
-        }
-
-        .chat-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 1000;
-            transition: transform 0.3s;
-            border: none;
-        }
-
-        .chat-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .chat-window {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 350px;
-            height: 450px;
-            background-color: var(--card);
-            border-radius: 15px;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            transform-origin: bottom right;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .chat-window.closed {
-            transform: scale(0);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .chat-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-
-        .chat-header i {
-            cursor: pointer;
-        }
-
-        .chat-body {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background-color: var(--surface);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .msg-bot {
-            background-color: var(--surface-2);
-            color: var(--text);
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-
-        .msg-user {
-            background-color: var(--primary);
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-
-        .chat-input-area {
-            padding: 10px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-            background: var(--card);
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            outline: none;
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .chat-send {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .overview-card {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .score-container {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-
-            .metrics-container {
-                width: 100%;
-            }
-
-            .chat-window {
-                width: 90% !important;
-                right: 5% !important;
-                bottom: 80px !important;
-            }
-        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 </head>
+
 <body>
 
 <div class="container">
+
     <header>
 
-        <button class="theme-toggle" 
-                 style="right:120px;"
-                 onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i>
-            Logout
-        </button>
-        <button class="theme-toggle" id="theme-toggle" type="button" onclick="toggleTheme()">
-            <i class="fas fa-moon" id="theme-icon"></i>
-            <span id="theme-label">Dark</span>
-        </button>
+        <h1>
+            <i class="fas fa-spa"></i>
+            Sensory Environment Monitor
+        </h1>
 
-        <h1><i class="fas fa-spa"></i> Sensory Environment Monitor</h1>
-        <p id="welcome-user"></p>
         <p>Calm, real-time monitoring space</p>
+
     </header>
 
-    <h2>Room 1: Primary Monitor</h2>
-    <div class="card" id="live-alert-card">
-    <h3><i class="fas fa-bell"></i> Live Alert Status</h3>
+    <!-- ROOM 1 -->
 
-    <div class="alert-box alert-good" id="live-alert-box">
-        <i class="fas fa-check-circle"></i>
-        Environment Stable
-    </div>
-    </div>
+    <h2>Room 1: Primary Monitor</h2>
+
     <div class="card overview-card">
+
         <div class="score-container">
+
             <div class="circular-chart" id="score-ring">
+
                 <div class="score-text-wrapper">
+
                     <span class="score-big" id="score-value">--</span>
+
                     <span class="score-label">Calm Score</span>
+
                 </div>
+
             </div>
-            <div class="score-status-text" id="status-text">Scanning...</div>
+
+            <div class="score-status-text" id="status-text">
+                Scanning...
+            </div>
+
         </div>
 
         <div class="metrics-container">
+
             <div class="metric-item">
+
                 <div class="metric-header">
-                    <span><i class="fas fa-thermometer-half"></i> Temperature</span>
-                    <span class="metric-value-text" id="temp-value">--°C</span>
+
+                    <span>
+                        <i class="fas fa-thermometer-half"></i>
+                        Temperature
+                    </span>
+
+                    <span class="metric-value-text" id="temp-value">
+                        --°C
+                    </span>
+
                 </div>
+
                 <div class="progress-container">
+
                     <div class="progress-fill bar-temp" id="fill-temp"></div>
+
                 </div>
+
             </div>
 
             <div class="metric-item">
+
                 <div class="metric-header">
-                    <span><i class="fas fa-sun"></i> Light Softness</span>
-                    <span class="metric-value-text" id="light-value">--</span>
+
+                    <span>
+                        <i class="fas fa-sun"></i>
+                        Light Softness
+                    </span>
+
+                    <span class="metric-value-text" id="light-value">
+                        --
+                    </span>
+
                 </div>
+
                 <div class="progress-container">
+
                     <div class="progress-fill bar-light" id="fill-light"></div>
+
                 </div>
+
             </div>
 
             <div class="metric-item">
+
                 <div class="metric-header">
-                    <span><i class="fas fa-volume-up"></i> Sound Level</span>
-                    <span class="metric-value-text" id="noise-value">--</span>
+
+                    <span>
+                        <i class="fas fa-volume-up"></i>
+                        Sound Level
+                    </span>
+
+                    <span class="metric-value-text" id="noise-value">
+                        --
+                    </span>
+
                 </div>
+
                 <div class="progress-container">
+
                     <div class="progress-fill bar-noise" id="fill-noise"></div>
+
                 </div>
+
             </div>
 
-            <div class="metric-item">
-                <div class="metric-header">
-                    <span><i class="fas fa-user-friends"></i> Occupancy Status</span>
-                    <span class="metric-value-text" id="occ-value">--</span>
+        </div>
+
+    </div>
+
+    <!-- ROOM 2 -->
+
+    <h2>Room 2: Primary Monitor</h2>
+
+    <div class="card overview-card">
+
+        <div class="score-container">
+
+            <div class="circular-chart" id="score-ring-room2">
+
+                <div class="score-text-wrapper">
+
+                    <span class="score-big" id="score-value-room2">--</span>
+
+                    <span class="score-label">Calm Score</span>
+
                 </div>
+
+            </div>
+
+            <div class="score-status-text" id="status-text-room2">
+                Scanning...
+            </div>
+
+        </div>
+
+        <div class="metrics-container">
+
+            <div class="metric-item">
+
+                <div class="metric-header">
+
+                    <span>
+                        <i class="fas fa-thermometer-half"></i>
+                        Temperature
+                    </span>
+
+                    <span class="metric-value-text" id="temp-value-room2">
+                        --°C
+                    </span>
+
+                </div>
+
                 <div class="progress-container">
-                    <div class="progress-fill bar-occ" id="fill-occ"></div>
+
+                    <div class="progress-fill bar-temp" id="fill-temp-room2"></div>
+
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="card">
-        <h3><i class="fas fa-clipboard-check"></i> Comfort Analysis</h3>
-        <div id="recommendations-list">
-            <div class="alert-box alert-good">
-                <i class="fas fa-info-circle"></i> Waiting for live sensor data...
             </div>
-        </div>
-    </div>
 
-    <h2>Room 2: Radar & Ideal Conditions</h2>
-    <div class="card overview-card" style="padding: 20px;">
-        <div class="metrics-container" style="width: 100%;">
             <div class="metric-item">
+
                 <div class="metric-header">
-                    <span><i class="fas fa-thermometer-half" style="color: var(--success)"></i> Temperature (Ideal Template)</span>
-                    <span class="metric-value-text" id="room2-temp">22.0°C</span>
+
+                    <span>
+                        <i class="fas fa-sun"></i>
+                        Light Softness
+                    </span>
+
+                    <span class="metric-value-text" id="light-value-room2">
+                        --
+                    </span>
+
                 </div>
+
                 <div class="progress-container">
-                    <div class="progress-fill bar-temp" style="width: 50%; background: var(--success);"></div>
+
+                    <div class="progress-fill bar-light" id="fill-light-room2"></div>
+
                 </div>
+
             </div>
-            <br>
+
             <div class="metric-item">
+
                 <div class="metric-header">
-                    <span><i class="fas fa-satellite-dish" style="color: var(--primary)"></i> Radar Monitor (Real-Time)</span>
-                    <span class="metric-value-text" id="radar-value" style="font-size: 1.2rem;">Scanning...</span>
+
+                    <span>
+                        <i class="fas fa-volume-up"></i>
+                        Sound Level
+                    </span>
+
+                    <span class="metric-value-text" id="noise-value-room2">
+                        --
+                    </span>
+
                 </div>
+
+                <div class="progress-container">
+
+                    <div class="progress-fill bar-noise" id="fill-noise-room2"></div>
+
+                </div>
+
             </div>
-        </div>
-    </div>
-</div>
 
-<div class="card">
-    <h3><i class="fas fa-chart-line"></i> Live Environment Graph</h3>
-
-    <canvas id="sensorChart" height="100"></canvas>
-</div>
-
-<div class="card">
-    <h3><i class="fas fa-chart-pie"></i> Calm Score Analytics</h3>
-
-    <div class="metrics-container">
-
-        <div class="metric-item">
-            <div class="metric-header">
-                <span>Highest Calm Score</span>
-                <span class="metric-value-text" id="max-score">--</span>
-            </div>
-        </div>
-
-        <div class="metric-item">
-            <div class="metric-header">
-                <span>Lowest Calm Score</span>
-                <span class="metric-value-text" id="min-score">--</span>
-            </div>
-        </div>
-
-        <div class="metric-item">
-            <div class="metric-header">
-                <span>Average Calm Score</span>
-                <span class="metric-value-text" id="avg-score">--</span>
-            </div>
         </div>
 
     </div>
-</div>
 
-<button class="chat-btn" onclick="toggleChat()">
-    <i class="fas fa-comments"></i>
-</button>
-
-<div class="chat-window closed" id="chat-window">
-    <div class="chat-header">
-        <span><i class="fas fa-robot"></i> Sensory Assistant</span>
-        <i class="fas fa-times" onclick="toggleChat()"></i>
-    </div>
-    <div class="chat-body" id="chat-body">
-        <div class="message msg-bot">Hello! Ask me about ideal conditions for autism sensory needs.</div>
-    </div>
-    <div class="chat-input-area">
-        <input type="text" id="chat-input" class="chat-input" placeholder="Type a question..." onkeydown="handleEnter(event)">
-        <button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-    </div>
 </div>
 
 <script>
 
-        const firebaseConfig = {
-        apiKey: "AIzaSyDmHts-DzWTly-45_ln9tHwVGKIyZAptPw",
-        authDomain: "autisense-3c985.firebaseapp.com",
-        databaseURL: "https://autisense-3c985-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "autisense-3c985",
-        storageBucket: "autisense-3c985.firebasestorage.app",
-        messagingSenderId: "532708826652",
-        appId: "1:532708826652:web:02459a772b54da1d3149d9"
-        };
+const firebaseConfig = {
 
-        firebase.initializeApp(firebaseConfig);
+    apiKey: "YOUR_API_KEY",
 
-        const db = firebase.database();
+    authDomain: "autisense-3c985.firebaseapp.com",
 
-        const scoreHistory = [];
+    databaseURL: "https://autisense-3c985-default-rtdb.asia-southeast1.firebasedatabase.app",
 
+    projectId: "autisense-3c985",
 
-    if(localStorage.getItem("loggedIn") != "true"){
-    window.location.href="/";
-    }   
+    storageBucket: "autisense-3c985.firebasestorage.app",
 
-    function applyTheme(theme) {
-        const body = document.body;
-        const icon = document.getElementById('theme-icon');
-        const label = document.getElementById('theme-label');
+    messagingSenderId: "532708826652",
 
-        if (theme === 'dark') {
-            body.classList.add('dark');
-            icon.className = 'fas fa-sun';
-            label.textContent = 'Day Mode';
-        } else {
-            body.classList.remove('dark');
-            icon.className = 'fas fa-moon';
-            label.textContent = 'Night Mode';
-        }
-    }
+    appId: "1:532708826652:web:02459a772b54da1d3149d9"
+};
 
-    function toggleTheme() {
-        const isDark = document.body.classList.contains('dark');
-        const next = isDark ? 'light' : 'dark';
-        localStorage.setItem('theme', next);
-        applyTheme(next);
-    }
+firebase.initializeApp(firebaseConfig);
 
-    document.getElementById("welcome-user").innerText =
-    "Welcome, " + localStorage.getItem("username");
-    (function initTheme() {
-        const saved = localStorage.getItem('theme');
-        if (saved) {
-            applyTheme(saved);
-            return;
-        }
-        applyTheme('light');
-    })();
+const db = firebase.database();
 
-    function toggleChat() {
-        const win = document.getElementById('chat-window');
-        win.classList.toggle('closed');
-        if (!win.classList.contains('closed')) {
-            document.getElementById('chat-input').focus();
-        }
-    }
-
-    function handleEnter(e) {
-        if (e.key === 'Enter') sendMessage();
-    }
-
-    function sendMessage() {
-        const inputField = document.getElementById('chat-input');
-        const text = inputField.value.trim();
-        if (!text) return;
-
-        addMessage(text, 'user');
-        inputField.value = '';
-
-        setTimeout(() => {
-            addMessage(getBotResponse(text), 'bot');
-        }, 500);
-    }
-
-    function addMessage(text, sender) {
-        const body = document.getElementById('chat-body');
-        const div = document.createElement('div');
-        div.className = `message msg-${sender}`;
-        div.innerText = text;
-        body.appendChild(div);
-        body.scrollTop = body.scrollHeight;
-    }
-
-    function getBotResponse(input) {
-        const lower = input.toLowerCase();
-
-        if (lower.includes('temp')) {
-            return "A stable temperature around 20°C to 23°C is usually more comfortable for a sensory-friendly room.";
-        }
-        if (lower.includes('light')) {
-            return "Soft, non-flickering light is better. Very bright or very dark rooms may feel uncomfortable.";
-        }
-        if (lower.includes('sound') || lower.includes('noise')) {
-            return "A quieter room usually helps reduce sensory overload.";
-        }
-        if (lower.includes('score') || lower.includes('calm')) {
-            return "The calm score shows how sensory-friendly Room 1 is based on temperature, light, sound, and occupancy.";
-        }
-        if (lower.includes('radar')) {
-            return "The radar checks movement in Room 2. Room 2 acts as the template for a calm room.";
-        }
-        if (lower.includes('hi') || lower.includes('hello')) {
-            return "Hello! Ask me about temperature, light, sound, calm score, or radar.";
-        }
-
-        return "I can answer about temperature, light, sound, calm status, and radar monitoring.";
-    }
-
-    function updateComfortAnalysis(data, score) {
-        const list = document.getElementById('recommendations-list');
-        let reasons = [];
-
-        if (data.temperature > 27) reasons.push("Room 1 is getting warm.");
-        if (data.temperature < 21) reasons.push("Room 1 is getting cold.");
-        if (data.sound > 1200) reasons.push("Room 1 is too loud.");
-        if (data.light > 3000) reasons.push("Bright light detected in Room 1.");
-        if (data.light < 200) reasons.push("Room 1 is too dark.");
-        if (data.motion === 1) reasons.push("Room 1 is occupied.");
-        if (data.radar === 1) reasons.push("Movement detected in Room 2.");
-
-        list.innerHTML = "";
-
-        if (reasons.length === 0) {
-            list.innerHTML = '<div class="alert-box alert-good"><i class="fas fa-check-circle"></i> Room 1 is sensory safe and comfortable.</div>';
-        } else {
-            reasons.forEach(reason => {
-                list.innerHTML += `<div class="alert-box alert-bad"><i class="fas fa-hand-paper"></i> ${reason}</div>`;
-            });
-        }
-    }
-
-    const chartLabels = [];
-    const tempData = [];
-    const soundData = [];
-
-const ctx = document.getElementById('sensorChart').getContext('2d');
-
-const sensorChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: chartLabels,
-        datasets: [
-            {
-                label: 'Temperature',
-                data: tempData,
-                borderWidth: 2,
-                tension: 0.4,
-                fill:false,
-                pointRadius: 3,
-                pointHoverRadius: 5,
-                yAxisID: 'y'
-            },
-            {
-                label: 'Sound',
-                data: soundData,
-                borderWidth: 2,
-                tension: 0.4,
-                fill:   false,
-                pointRadius: 3,
-                pointHoverRadius: 5,
-                yAxisID: 'y1'
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: true,
-
-        animation: {
-            duration: 800,
-        },
-
-        scales: {
-            y: {
-                type: 'linear',
-                position: 'left',
-                min: 0,
-                max: 40
-            },
-
-            y1: {
-                type: 'linear',
-                position: 'right',
-                min: 0,
-                max: 2000,
-                grid: {
-                    drawOnChartArea: false
-                }
-            }
-        }
-    }
-});
-
-    db.ref("room1").on("value", (snapshot) => {
+db.ref("room1").on("value", (snapshot) => {
 
     const data = snapshot.val();
 
@@ -763,95 +500,65 @@ const sensorChart = new Chart(ctx, {
     document.getElementById('fill-temp').style.width =
     Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
 
-    document.getElementById('light-value').innerText = data.light;
+    document.getElementById('light-value').innerText =
+    data.light;
 
     document.getElementById('fill-light').style.width =
     Math.min((data.light / 4095) * 100, 100) + "%";
 
-    document.getElementById('noise-value').innerText = data.sound;
+    document.getElementById('noise-value').innerText =
+    data.sound;
 
     document.getElementById('fill-noise').style.width =
     Math.min((data.sound / 2000) * 100, 100) + "%";
 
-    document.getElementById('occ-value').innerText =
-    data.motion === 1 ? "Occupied" : "Empty";
+    document.getElementById('score-value').innerText =
+    data.score;
 
-    document.getElementById('fill-occ').style.width =
-    data.motion === 1 ? "100%" : "0%";
-
-    document.getElementById('radar-value').innerText =
-    data.radar === 1 ? "Movement Detected" : "No Movement";
-
-    const score = data.score;
-
-    scoreHistory.push(score);
-
-if (scoreHistory.length > 20) {
-    scoreHistory.shift();
-}
-
-    const maxScore = Math.max(...scoreHistory);
-    const minScore = Math.min(...scoreHistory);
-
-    const avgScore =
-    (scoreHistory.reduce((a, b) => a + b, 0) / scoreHistory.length).toFixed(1);
-
-    document.getElementById('max-score').innerText = maxScore;
-    document.getElementById('min-score').innerText = minScore;
-    document.getElementById('avg-score').innerText = avgScore;
-
-    document.getElementById('score-value').innerText = score;
-
-    const statusText = document.getElementById('status-text');
-
-    const scoreRing = document.getElementById('score-ring');
-
-    let color = "#6b9080";
-
-    if (score >= 80) {
-        statusText.innerText = "Environment is Calm";
-        color = "#6b9080";
-    }
-    else if (score >= 50) {
-        statusText.innerText = "Moderate";
-        color = "#e9c46a";
-    }
-    else {
-        statusText.innerText = "Not Calm";
-        color = "#e76f51";
-    }
-
-    statusText.style.color = color;
+    const scoreRing =
+    document.getElementById('score-ring');
 
     scoreRing.style.background =
-    `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
+    `conic-gradient(#6b9080 ${data.score}%, var(--surface-2) 0%)`;
 
-    const currentTime = new Date().toLocaleTimeString();
-
-    chartLabels.push(currentTime);
-    tempData.push(data.temperature);
-    soundData.push(data.sound);
-
-    if (chartLabels.length > 10) {
-
-        chartLabels.shift();
-        tempData.shift();
-        soundData.shift();
-    }
-
-    sensorChart.update();
-
-
-    updateComfortAnalysis(data, score);
 });
 
-    function logout(){
+db.ref("room2").on("value", (snapshot) => {
 
-        localStorage.removeItem("loggedIn");
-        localStorage.removeItem("username");
+    const data = snapshot.val();
 
-       window.location.href="index.html";
-    }
+    if(!data) return;
+
+    document.getElementById('temp-value-room2').innerText =
+    data.temperature.toFixed(1) + "°C";
+
+    document.getElementById('fill-temp-room2').style.width =
+    Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
+
+    document.getElementById('light-value-room2').innerText =
+    data.light;
+
+    document.getElementById('fill-light-room2').style.width =
+    Math.min((data.light / 4095) * 100, 100) + "%";
+
+    document.getElementById('noise-value-room2').innerText =
+    data.sound;
+
+    document.getElementById('fill-noise-room2').style.width =
+    Math.min((data.sound / 2000) * 100, 100) + "%";
+
+    document.getElementById('score-value-room2').innerText =
+    data.score;
+
+    const scoreRing =
+    document.getElementById('score-ring-room2');
+
+    scoreRing.style.background =
+    `conic-gradient(#6b9080 ${data.score}%, var(--surface-2) 0%)`;
+
+});
+
 </script>
+
 </body>
 </html>
