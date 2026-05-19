@@ -557,6 +557,22 @@
 
     <div class="card">
         <h3><i class="fas fa-chart-pie"></i> Calm Score Analytics</h3>
+                <div class="card">
+
+            <h3>
+                <i class="fas fa-brain"></i>
+                Best Room Recommendation
+            </h3>
+
+            <div class="alert-box alert-good" id="best-room-box">
+
+                <i class="fas fa-check-circle"></i>
+
+                Waiting for room comparison...
+
+            </div>
+
+        </div>
         <div class="metrics-container">
             <div class="metric-item">
                 <div class="metric-header">
@@ -613,6 +629,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const scoreHistory = [];
+    let latestRoom1Score = 0;
+    let latestRoom2Score = 0;
 
     if (localStorage.getItem("loggedIn") != "true") {
         window.location.href = "/";
@@ -804,6 +822,7 @@ const sensorChart = new Chart(ctx, {
         document.getElementById('fill-occ').style.width = data.motion === 1 ? "100%" : "0%";
 
         const score = data.score;
+        latestRoom1Score = score;
         scoreHistory.push(score);
         if (scoreHistory.length > 20) scoreHistory.shift();
 
@@ -828,6 +847,8 @@ const sensorChart = new Chart(ctx, {
         chartLabels.push(currentTime);
         room1ScoreData.push(data.score);
         if (chartLabels.length > 10) { chartLabels.shift(); room1ScoreData.shift(); }
+        updateBestRoomRecommendation();
+        sensorChart.update();
     });
 
     // ===== ROOM 2 FIREBASE LISTENER =====
@@ -853,6 +874,7 @@ const sensorChart = new Chart(ctx, {
 
         // Score & Ring
         const score2 = data.score;
+        latestRoom2Score = score2;
         document.getElementById('score-value-room2').innerText = score2;
 
         const statusText2 = document.getElementById('status-text-room2');
@@ -872,8 +894,44 @@ if (room2ScoreData.length > 10) {
     room2ScoreData.shift();
 }
 
+updateBestRoomRecommendation();
 sensorChart.update();
     });
+
+    function updateBestRoomRecommendation() {
+
+            const box = document.getElementById('best-room-box');
+
+            if (latestRoom1Score > latestRoom2Score) {
+
+                box.className = "alert-box alert-good";
+
+                box.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    Recommended Room: <strong>Room 1</strong> is currently more sensory-friendly.
+                `;
+            }
+
+            else if (latestRoom2Score > latestRoom1Score) {
+
+                box.className = "alert-box alert-good";
+
+                box.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    Recommended Room: <strong>Room 2</strong> is currently calmer and more suitable.
+                `;
+            }
+
+            else {
+
+                box.className = "alert-box alert-good";
+
+                box.innerHTML = `
+                    <i class="fas fa-equals"></i>
+                    Both rooms currently have similar calm conditions.
+                `;
+            }
+        }
 
     function logout() {
         localStorage.removeItem("loggedIn");
