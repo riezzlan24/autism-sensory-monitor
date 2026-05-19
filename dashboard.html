@@ -12,7 +12,6 @@
     <style>
 
         :root {
-
             --primary: #4a6fa5;
             --secondary: #8da9c4;
             --success: #6b9080;
@@ -30,7 +29,6 @@
         }
 
         body.dark {
-
             --bg: #1a202c;
             --text: #e2e8f0;
             --muted: #a0aec0;
@@ -42,7 +40,6 @@
         }
 
         body {
-
             font-family: 'Open Sans', sans-serif;
             background-color: var(--bg);
             margin: 0;
@@ -53,35 +50,30 @@
         }
 
         .container {
-
             max-width: 1000px;
             margin: 0 auto;
             padding-bottom: 80px;
         }
 
         header {
-
             text-align: center;
             margin-bottom: 40px;
             position: relative;
         }
 
         h1 {
-
             color: var(--primary);
             font-weight: 700;
             margin-bottom: 8px;
         }
 
         header p {
-
             color: var(--muted);
             margin-top: 0;
             font-size: 1.1rem;
         }
 
         .theme-toggle {
-
             position: absolute;
             right: 0;
             top: 0;
@@ -98,7 +90,6 @@
         }
 
         .card {
-
             background: var(--card);
             border-radius: 20px;
             padding: 30px;
@@ -108,7 +99,6 @@
         }
 
         .overview-card {
-
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -116,7 +106,6 @@
         }
 
         .score-container {
-
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -125,7 +114,6 @@
         }
 
         .circular-chart {
-
             width: 180px;
             height: 180px;
             border-radius: 50%;
@@ -138,7 +126,6 @@
         }
 
         .circular-chart::before {
-
             content: "";
             position: absolute;
             width: 150px;
@@ -148,7 +135,6 @@
         }
 
         .score-text-wrapper {
-
             z-index: 10;
             text-align: center;
             display: flex;
@@ -156,7 +142,6 @@
         }
 
         .score-big {
-
             font-size: 3.5rem;
             font-weight: 700;
             line-height: 1;
@@ -164,7 +149,6 @@
         }
 
         .score-label {
-
             font-size: 0.85rem;
             color: var(--muted);
             text-transform: uppercase;
@@ -174,7 +158,6 @@
         }
 
         .score-status-text {
-
             margin-top: 15px;
             font-weight: 600;
             font-size: 1.1rem;
@@ -183,7 +166,6 @@
         }
 
         .metrics-container {
-
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -191,14 +173,12 @@
         }
 
         .metric-item {
-
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
 
         .metric-header {
-
             display: flex;
             justify-content: space-between;
             font-size: 14px;
@@ -207,13 +187,11 @@
         }
 
         .metric-value-text {
-
             color: var(--text);
             font-weight: bold;
         }
 
         .progress-container {
-
             background: var(--surface-2);
             height: 14px;
             border-radius: 7px;
@@ -222,19 +200,32 @@
         }
 
         .progress-fill {
-
             height: 100%;
             width: 0%;
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .bar-temp { background: linear-gradient(90deg, #8da9c4, #4a6fa5); }
-
         .bar-light { background: linear-gradient(90deg, #ffeaa7, #e9c46a); }
-
         .bar-noise { background: linear-gradient(90deg, #f4a261, #e76f51); }
-
         .bar-occ { background: linear-gradient(90deg, #a7c957, #6b9080); }
+
+        @media (max-width: 768px) {
+
+            .overview-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .score-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .metrics-container {
+                width: 100%;
+            }
+        }
 
     </style>
 
@@ -250,218 +241,275 @@
 
 <div class="container">
 
-    <header>
+<header>
 
-        <h1>
-            <i class="fas fa-spa"></i>
-            Sensory Environment Monitor
-        </h1>
+<h1>
+<i class="fas fa-spa"></i>
+Sensory Environment Monitor
+</h1>
 
-        <p>Calm, real-time monitoring space</p>
+<p>Calm, real-time monitoring space</p>
 
-    </header>
+</header>
 
-    <!-- ROOM 1 -->
+<!-- ROOM 1 -->
 
-    <h2>Room 1: Primary Monitor</h2>
+<h2>Room 1: Primary Monitor</h2>
 
-    <div class="card overview-card">
+<div class="card overview-card">
 
-        <div class="score-container">
+<div class="score-container">
 
-            <div class="circular-chart" id="score-ring">
+<div class="circular-chart" id="score-ring">
 
-                <div class="score-text-wrapper">
+<div class="score-text-wrapper">
 
-                    <span class="score-big" id="score-value">--</span>
+<span class="score-big" id="score-value">--</span>
 
-                    <span class="score-label">Calm Score</span>
+<span class="score-label">Calm Score</span>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-            <div class="score-status-text" id="status-text">
-                Scanning...
-            </div>
+<div class="score-status-text" id="status-text">
+Scanning...
+</div>
 
-        </div>
+</div>
 
-        <div class="metrics-container">
+<div class="metrics-container">
 
-            <div class="metric-item">
+<div class="metric-item">
 
-                <div class="metric-header">
+<div class="metric-header">
 
-                    <span>
-                        <i class="fas fa-thermometer-half"></i>
-                        Temperature
-                    </span>
+<span>
+<i class="fas fa-thermometer-half"></i>
+Temperature
+</span>
 
-                    <span class="metric-value-text" id="temp-value">
-                        --°C
-                    </span>
+<span class="metric-value-text" id="temp-value">
+--°C
+</span>
 
-                </div>
+</div>
 
-                <div class="progress-container">
+<div class="progress-container">
 
-                    <div class="progress-fill bar-temp" id="fill-temp"></div>
+<div class="progress-fill bar-temp" id="fill-temp"></div>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-            <div class="metric-item">
+<div class="metric-item">
 
-                <div class="metric-header">
+<div class="metric-header">
 
-                    <span>
-                        <i class="fas fa-sun"></i>
-                        Light Softness
-                    </span>
+<span>
+<i class="fas fa-sun"></i>
+Light Softness
+</span>
 
-                    <span class="metric-value-text" id="light-value">
-                        --
-                    </span>
+<span class="metric-value-text" id="light-value">
+--
+</span>
 
-                </div>
+</div>
 
-                <div class="progress-container">
+<div class="progress-container">
 
-                    <div class="progress-fill bar-light" id="fill-light"></div>
+<div class="progress-fill bar-light" id="fill-light"></div>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-            <div class="metric-item">
+<div class="metric-item">
 
-                <div class="metric-header">
+<div class="metric-header">
 
-                    <span>
-                        <i class="fas fa-volume-up"></i>
-                        Sound Level
-                    </span>
+<span>
+<i class="fas fa-volume-up"></i>
+Sound Level
+</span>
 
-                    <span class="metric-value-text" id="noise-value">
-                        --
-                    </span>
+<span class="metric-value-text" id="noise-value">
+--
+</span>
 
-                </div>
+</div>
 
-                <div class="progress-container">
+<div class="progress-container">
 
-                    <div class="progress-fill bar-noise" id="fill-noise"></div>
+<div class="progress-fill bar-noise" id="fill-noise"></div>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-        </div>
+<div class="metric-item">
 
-    </div>
+<div class="metric-header">
 
-    <!-- ROOM 2 -->
+<span>
+<i class="fas fa-user-friends"></i>
+Occupancy Status
+</span>
 
-    <h2>Room 2: Primary Monitor</h2>
+<span class="metric-value-text" id="occ-value">
+--
+</span>
 
-    <div class="card overview-card">
+</div>
 
-        <div class="score-container">
+<div class="progress-container">
 
-            <div class="circular-chart" id="score-ring-room2">
+<div class="progress-fill bar-occ" id="fill-occ"></div>
 
-                <div class="score-text-wrapper">
+</div>
 
-                    <span class="score-big" id="score-value-room2">--</span>
+</div>
 
-                    <span class="score-label">Calm Score</span>
+</div>
 
-                </div>
+</div>
 
-            </div>
+<!-- ROOM 2 -->
 
-            <div class="score-status-text" id="status-text-room2">
-                Scanning...
-            </div>
+<h2>Room 2: Primary Monitor</h2>
 
-        </div>
+<div class="card overview-card">
 
-        <div class="metrics-container">
+<div class="score-container">
 
-            <div class="metric-item">
+<div class="circular-chart" id="score-ring-room2">
 
-                <div class="metric-header">
+<div class="score-text-wrapper">
 
-                    <span>
-                        <i class="fas fa-thermometer-half"></i>
-                        Temperature
-                    </span>
+<span class="score-big" id="score-value-room2">--</span>
 
-                    <span class="metric-value-text" id="temp-value-room2">
-                        --°C
-                    </span>
+<span class="score-label">Calm Score</span>
 
-                </div>
+</div>
 
-                <div class="progress-container">
+</div>
 
-                    <div class="progress-fill bar-temp" id="fill-temp-room2"></div>
+<div class="score-status-text" id="status-text-room2">
+Scanning...
+</div>
 
-                </div>
+</div>
 
-            </div>
+<div class="metrics-container">
 
-            <div class="metric-item">
+<div class="metric-item">
 
-                <div class="metric-header">
+<div class="metric-header">
 
-                    <span>
-                        <i class="fas fa-sun"></i>
-                        Light Softness
-                    </span>
+<span>
+<i class="fas fa-thermometer-half"></i>
+Temperature
+</span>
 
-                    <span class="metric-value-text" id="light-value-room2">
-                        --
-                    </span>
+<span class="metric-value-text" id="temp-value-room2">
+--°C
+</span>
 
-                </div>
+</div>
 
-                <div class="progress-container">
+<div class="progress-container">
 
-                    <div class="progress-fill bar-light" id="fill-light-room2"></div>
+<div class="progress-fill bar-temp" id="fill-temp-room2"></div>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-            <div class="metric-item">
+<div class="metric-item">
 
-                <div class="metric-header">
+<div class="metric-header">
 
-                    <span>
-                        <i class="fas fa-volume-up"></i>
-                        Sound Level
-                    </span>
+<span>
+<i class="fas fa-sun"></i>
+Light Softness
+</span>
 
-                    <span class="metric-value-text" id="noise-value-room2">
-                        --
-                    </span>
+<span class="metric-value-text" id="light-value-room2">
+--
+</span>
 
-                </div>
+</div>
 
-                <div class="progress-container">
+<div class="progress-container">
 
-                    <div class="progress-fill bar-noise" id="fill-noise-room2"></div>
+<div class="progress-fill bar-light" id="fill-light-room2"></div>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-        </div>
+<div class="metric-item">
 
-    </div>
+<div class="metric-header">
+
+<span>
+<i class="fas fa-volume-up"></i>
+Sound Level
+</span>
+
+<span class="metric-value-text" id="noise-value-room2">
+--
+</span>
+
+</div>
+
+<div class="progress-container">
+
+<div class="progress-fill bar-noise" id="fill-noise-room2"></div>
+
+</div>
+
+</div>
+
+<div class="metric-item">
+
+<div class="metric-header">
+
+<span>
+<i class="fas fa-user-friends"></i>
+Occupancy Status
+</span>
+
+<span class="metric-value-text" id="occ-value-room2">
+--
+</span>
+
+</div>
+
+<div class="progress-container">
+
+<div class="progress-fill bar-occ" id="fill-occ-room2"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- COMPARISON GRAPH -->
+
+<div class="card">
+
+<h3>
+<i class="fas fa-chart-line"></i>
+Room Comparison Graph
+</h3>
+
+<canvas id="sensorChart" height="100"></canvas>
 
 </div>
 
@@ -469,92 +517,211 @@
 
 const firebaseConfig = {
 
-    apiKey: "YOUR_API_KEY",
+apiKey: "AIzaSyDmHts-DzWTly-45_ln9tHwVGKIyZAptPw",
 
-    authDomain: "autisense-3c985.firebaseapp.com",
+authDomain: "autisense-3c985.firebaseapp.com",
 
-    databaseURL: "https://autisense-3c985-default-rtdb.asia-southeast1.firebasedatabase.app",
+databaseURL: "https://autisense-3c985-default-rtdb.asia-southeast1.firebasedatabase.app",
 
-    projectId: "autisense-3c985",
+projectId: "autisense-3c985",
 
-    storageBucket: "autisense-3c985.firebasestorage.app",
+storageBucket: "autisense-3c985.firebasestorage.app",
 
-    messagingSenderId: "532708826652",
+messagingSenderId: "532708826652",
 
-    appId: "1:532708826652:web:02459a772b54da1d3149d9"
+appId: "1:532708826652:web:02459a772b54da1d3149d9"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
 
+const chartLabels = [];
+
+const room1ScoreData = [];
+
+const room2ScoreData = [];
+
+const ctx = document.getElementById('sensorChart').getContext('2d');
+
+const sensorChart = new Chart(ctx, {
+
+type: 'line',
+
+data: {
+
+labels: chartLabels,
+
+datasets: [
+
+{
+
+label: 'Room 1 Calm Score',
+
+data: room1ScoreData,
+
+borderWidth: 3,
+
+tension: 0.4,
+
+fill: false,
+
+pointRadius: 3,
+
+pointHoverRadius: 5
+
+},
+
+{
+
+label: 'Room 2 Calm Score',
+
+data: room2ScoreData,
+
+borderWidth: 3,
+
+tension: 0.4,
+
+fill: false,
+
+pointRadius: 3,
+
+pointHoverRadius: 5
+
+}
+
+]
+
+},
+
+options: {
+
+responsive: true,
+
+maintainAspectRatio: true,
+
+animation: {
+
+duration: 800
+
+},
+
+scales: {
+
+y: {
+
+min: 0,
+
+max: 100
+
+}
+
+}
+
+}
+
+});
+
 db.ref("room1").on("value", (snapshot) => {
 
-    const data = snapshot.val();
+const data = snapshot.val();
 
-    if(!data) return;
+if(!data) return;
 
-    document.getElementById('temp-value').innerText =
-    data.temperature.toFixed(1) + "°C";
+document.getElementById('temp-value').innerText =
+data.temperature.toFixed(1) + "°C";
 
-    document.getElementById('fill-temp').style.width =
-    Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
+document.getElementById('fill-temp').style.width =
+Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
 
-    document.getElementById('light-value').innerText =
-    data.light;
+document.getElementById('light-value').innerText =
+data.light;
 
-    document.getElementById('fill-light').style.width =
-    Math.min((data.light / 4095) * 100, 100) + "%";
+document.getElementById('fill-light').style.width =
+Math.min((data.light / 4095) * 100, 100) + "%";
 
-    document.getElementById('noise-value').innerText =
-    data.sound;
+document.getElementById('noise-value').innerText =
+data.sound;
 
-    document.getElementById('fill-noise').style.width =
-    Math.min((data.sound / 2000) * 100, 100) + "%";
+document.getElementById('fill-noise').style.width =
+Math.min((data.sound / 2000) * 100, 100) + "%";
 
-    document.getElementById('score-value').innerText =
-    data.score;
+document.getElementById('occ-value').innerText =
+data.motion === 1 ? "Occupied" : "Empty";
 
-    const scoreRing =
-    document.getElementById('score-ring');
+document.getElementById('fill-occ').style.width =
+data.motion === 1 ? "100%" : "0%";
 
-    scoreRing.style.background =
-    `conic-gradient(#6b9080 ${data.score}%, var(--surface-2) 0%)`;
+document.getElementById('score-value').innerText =
+data.score;
+
+const scoreRing =
+document.getElementById('score-ring');
+
+scoreRing.style.background =
+`conic-gradient(#6b9080 ${data.score}%, var(--surface-2) 0%)`;
 
 });
 
 db.ref("room2").on("value", (snapshot) => {
 
-    const data = snapshot.val();
+const data = snapshot.val();
 
-    if(!data) return;
+if(!data) return;
 
-    document.getElementById('temp-value-room2').innerText =
-    data.temperature.toFixed(1) + "°C";
+document.getElementById('temp-value-room2').innerText =
+data.temperature.toFixed(1) + "°C";
 
-    document.getElementById('fill-temp-room2').style.width =
-    Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
+document.getElementById('fill-temp-room2').style.width =
+Math.min(Math.max(((data.temperature - 15) / 20) * 100, 0), 100) + "%";
 
-    document.getElementById('light-value-room2').innerText =
-    data.light;
+document.getElementById('light-value-room2').innerText =
+data.light;
 
-    document.getElementById('fill-light-room2').style.width =
-    Math.min((data.light / 4095) * 100, 100) + "%";
+document.getElementById('fill-light-room2').style.width =
+Math.min((data.light / 4095) * 100, 100) + "%";
 
-    document.getElementById('noise-value-room2').innerText =
-    data.sound;
+document.getElementById('noise-value-room2').innerText =
+data.sound;
 
-    document.getElementById('fill-noise-room2').style.width =
-    Math.min((data.sound / 2000) * 100, 100) + "%";
+document.getElementById('fill-noise-room2').style.width =
+Math.min((data.sound / 2000) * 100, 100) + "%";
 
-    document.getElementById('score-value-room2').innerText =
-    data.score;
+document.getElementById('occ-value-room2').innerText =
+data.motion === 1 ? "Occupied" : "Empty";
 
-    const scoreRing =
-    document.getElementById('score-ring-room2');
+document.getElementById('fill-occ-room2').style.width =
+data.motion === 1 ? "100%" : "0%";
 
-    scoreRing.style.background =
-    `conic-gradient(#6b9080 ${data.score}%, var(--surface-2) 0%)`;
+document.getElementById('score-value-room2').innerText =
+data.score;
+
+const scoreRing =
+document.getElementById('score-ring-room2');
+
+scoreRing.style.background =
+`conic-gradient(#6b9080 ${data.score}%, var(--surface-2) 0%)`;
+
+const currentTime = new Date().toLocaleTimeString();
+
+chartLabels.push(currentTime);
+
+room1ScoreData.push(data.score);
+
+room2ScoreData.push(data.score);
+
+if(chartLabels.length > 10){
+
+chartLabels.shift();
+
+room1ScoreData.shift();
+
+room2ScoreData.shift();
+
+}
+
+sensorChart.update();
 
 });
 
