@@ -433,6 +433,11 @@
                 </div>
             </div>
             <div class="score-status-text" id="status-text">Scanning...</div>
+            <div id="badge-room1" class="alert-box alert-good"
+            style="margin-top:15px; padding:10px 15px; font-weight:700;">
+
+            SAFE
+</div>
         </div>
 
         <div class="metrics-container">
@@ -500,6 +505,11 @@
             <div class="score-status-text" id="status-text-room2">
                 Scanning...
             </div>
+            <div id="badge-room2" class="alert-box alert-good"
+     style="margin-top:15px; padding:10px 15px; font-weight:700;">
+
+    SAFE
+</div>
         </div>
         <div class="metrics-container">
             <div class="metric-item">
@@ -918,11 +928,49 @@ const sensorChart = new Chart(ctx, {
         if (score >= 80) { statusText.innerText = "Environment is Calm"; color = "#6b9080"; }
         else if (score >= 50) { statusText.innerText = "Moderate"; color = "#e9c46a"; }
         else { statusText.innerText = "Not Calm"; color = "#e76f51"; }
+        const badge1 = document.getElementById('badge-room1');
+
+        if (score >= 80) {
+
+            badge1.className = "alert-box alert-good";
+
+            badge1.style.background = "";
+
+            badge1.style.borderLeft = "";
+
+            badge1.innerHTML = "SAFE";
+        }
+
+        else if (score >= 50) {
+
+            badge1.className = "alert-box alert-good";
+            badge1.style.background = "rgba(233, 196, 106, 0.15)";
+
+            badge1.style.borderLeft = "4px solid #e9c46a";
+
+            badge1.innerHTML = "MODERATE";
+        }
+
+        else {
+
+            badge1.className = "alert-box alert-bad";
+
+            badge1.style.background = "";
+
+            badge1.style.borderLeft = "";
+
+            badge1.innerHTML = "OVERSTIMULATING";
+        }
 
         statusText.style.color = color;
         scoreRing.style.background = `conic-gradient(${color} ${score}%, var(--surface-2) 0%)`;
 
-        const currentTime = new Date().toLocaleTimeString();
+        const currentTime = new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+    });
+
         chartLabels.push(currentTime);
         room1ScoreData.push(data.score);
         if (chartLabels.length > 10) { chartLabels.shift(); room1ScoreData.shift(); }
@@ -965,6 +1013,39 @@ const sensorChart = new Chart(ctx, {
         if (score2 >= 80) { statusText2.innerText = "Environment is Calm"; color2 = "#6b9080"; }
         else if (score2 >= 50) { statusText2.innerText = "Moderate"; color2 = "#e9c46a"; }
         else { statusText2.innerText = "Not Calm"; color2 = "#e76f51"; }
+        const badge2 = document.getElementById('badge-room2');
+
+if (score2 >= 80) {
+
+    badge2.className = "alert-box alert-good";
+
+    badge2.style.background = "";
+
+    badge2.style.borderLeft = "";
+
+    badge2.innerHTML = "SAFE";
+}
+
+else if (score2 >= 50) {
+
+    badge2.className = "alert-box alert-good";
+    badge2.style.background = "rgba(233, 196, 106, 0.15)";
+
+    badge2.style.borderLeft = "4px solid #e9c46a";
+
+    badge2.innerHTML = "MODERATE";
+}
+
+else {
+
+    badge2.className = "alert-box alert-bad";
+
+    badge2.style.background = "";
+
+    badge2.style.borderLeft = "";
+
+    badge2.innerHTML = "OVERSTIMULATING";
+}
 
         statusText2.style.color = color2;
         scoreRing2.style.background = `conic-gradient(${color2} ${score2}%, var(--surface-2) 0%)`;
