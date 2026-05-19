@@ -838,33 +838,23 @@ const sensorChart = new Chart(ctx, {
 
             {
                 label: 'Room 1 Calm Score',
-
                 data: room1ScoreData,
-
                 borderWidth: 3,
-
                 tension: 0.4,
-
+                cubicInterpolationMode: 'monotone',
                 fill: false,
-
                 pointRadius: 3,
-
                 pointHoverRadius: 5
             },
 
             {
                 label: 'Room 2 Calm Score',
-
                 data: room2ScoreData,
-
                 borderWidth: 3,
-
                 tension: 0.4,
-
+                cubicInterpolationMode: 'monotone',
                 fill: false,
-
                 pointRadius: 3,
-
                 pointHoverRadius: 5
             }
 
