@@ -712,47 +712,79 @@
 
     // ===== CHART =====
     const chartLabels = [];
-    const tempData = [];
-    const soundData = [];
 
-    const ctx = document.getElementById('sensorChart').getContext('2d');
-    const sensorChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: chartLabels,
-            datasets: [
-                {
-                    label: 'Temperature',
-                    data: tempData,
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Sound',
-                    data: soundData,
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: false,
-                    pointRadius: 3,
-                    pointHoverRadius: 5,
-                    yAxisID: 'y1'
-                }
-            ]
+const room1ScoreData = [];
+
+const room2ScoreData = [];
+
+const ctx = document.getElementById('sensorChart').getContext('2d');
+
+const sensorChart = new Chart(ctx, {
+
+    type: 'line',
+
+    data: {
+
+        labels: chartLabels,
+
+        datasets: [
+
+            {
+                label: 'Room 1 Calm Score',
+
+                data: room1ScoreData,
+
+                borderWidth: 3,
+
+                tension: 0.4,
+
+                fill: false,
+
+                pointRadius: 3,
+
+                pointHoverRadius: 5
+            },
+
+            {
+                label: 'Room 2 Calm Score',
+
+                data: room2ScoreData,
+
+                borderWidth: 3,
+
+                tension: 0.4,
+
+                fill: false,
+
+                pointRadius: 3,
+
+                pointHoverRadius: 5
+            }
+
+        ]
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: true,
+
+        animation: {
+            duration: 800
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            animation: { duration: 800 },
-            scales: {
-                y: { type: 'linear', position: 'left', min: 0, max: 40 },
-                y1: { type: 'linear', position: 'right', min: 0, max: 2000, grid: { drawOnChartArea: false } }
+
+        scales: {
+
+            y: {
+
+                min: 0,
+
+                max: 100
             }
         }
-    });
+    }
+});
 
     // ===== ROOM 1 FIREBASE LISTENER =====
     db.ref("room1").on("value", (snapshot) => {
@@ -794,12 +826,8 @@
 
         const currentTime = new Date().toLocaleTimeString();
         chartLabels.push(currentTime);
-        tempData.push(data.temperature);
-        soundData.push(data.sound);
-        if (chartLabels.length > 10) { chartLabels.shift(); tempData.shift(); soundData.shift(); }
-        sensorChart.update();
-
-        updateComfortAnalysis(data, score);
+        room1ScoreData.push(data.score);
+        if (chartLabels.length > 10) { chartLabels.shift(); room1ScoreData.shift(); }
     });
 
     // ===== ROOM 2 FIREBASE LISTENER =====
@@ -837,6 +865,14 @@
 
         statusText2.style.color = color2;
         scoreRing2.style.background = `conic-gradient(${color2} ${score2}%, var(--surface-2) 0%)`;
+        room2ScoreData.push(score2);
+
+if (room2ScoreData.length > 10) {
+
+    room2ScoreData.shift();
+}
+
+sensorChart.update();
     });
 
     function logout() {
