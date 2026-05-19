@@ -550,68 +550,164 @@
     </div>
 
     <!-- ===== CHARTS & ANALYTICS ===== -->
-    <div class="card">
-        <h3><i class="fas fa-chart-line"></i> Live Environment Graph</h3>
-        <canvas id="sensorChart" height="100"></canvas>
-    </div>
 
-    <div class="card">
-        <h3><i class="fas fa-chart-pie"></i> Calm Score Analytics</h3>
-                <div class="card">
+<div class="card">
 
-            <h3>
-                <i class="fas fa-brain"></i>
-                Best Room Recommendation
-            </h3>
+    <h3>
+        <i class="fas fa-chart-line"></i>
+        Live Environment Graph
+    </h3>
 
-            <div class="alert-box alert-good" id="best-room-box">
+    <canvas id="sensorChart" height="100"></canvas>
 
-                <i class="fas fa-check-circle"></i>
-
-                Waiting for room comparison...
-
-            </div>
-
-        </div>
-        <div class="metrics-container">
-            <div class="metric-item">
-                <div class="metric-header">
-                    <span>Highest Calm Score</span>
-                    <span class="metric-value-text" id="max-score">--</span>
-                </div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-header">
-                    <span>Lowest Calm Score</span>
-                    <span class="metric-value-text" id="min-score">--</span>
-                </div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-header">
-                    <span>Average Calm Score</span>
-                    <span class="metric-value-text" id="avg-score">--</span>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
+<!-- ===== CALM SCORE ANALYTICS ===== -->
+
+<div class="card">
+
+    <h3>
+        <i class="fas fa-chart-pie"></i>
+        Calm Score Analytics
+    </h3>
+
+    <div class="metrics-container">
+
+        <div class="metric-item">
+
+            <div class="metric-header">
+
+                <span>Highest Calm Score</span>
+
+                <span class="metric-value-text" id="max-score">
+                    --
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="metric-item">
+
+            <div class="metric-header">
+
+                <span>Lowest Calm Score</span>
+
+                <span class="metric-value-text" id="min-score">
+                    --
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="metric-item">
+
+            <div class="metric-header">
+
+                <span>Average Calm Score</span>
+
+                <span class="metric-value-text" id="avg-score">
+                    --
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===== BEST ROOM RECOMMENDATION ===== -->
+
+<div class="card">
+
+    <h3>
+        <i class="fas fa-brain"></i>
+        Best Room Recommendation
+    </h3>
+
+    <div class="alert-box alert-good" id="best-room-box">
+
+        <i class="fas fa-check-circle"></i>
+
+        Waiting for room comparison...
+
+    </div>
+
+</div>
+
+<!-- ===== LIVE NOTIFICATION ALERTS ===== -->
+
+<div class="card">
+
+    <h3>
+        <i class="fas fa-exclamation-triangle"></i>
+        Live Notification Alerts
+    </h3>
+
+    <div class="alert-box alert-good" id="notification-box">
+
+        <i class="fas fa-check-circle"></i>
+
+        All rooms currently stable.
+
+    </div>
+
+</div>
+
+<!-- ===== CHAT BUTTON ===== -->
+
 <button class="chat-btn" onclick="toggleChat()">
+
     <i class="fas fa-comments"></i>
+
 </button>
 
+<!-- ===== CHAT WINDOW ===== -->
+
 <div class="chat-window closed" id="chat-window">
+
     <div class="chat-header">
-        <span><i class="fas fa-robot"></i> Sensory Assistant</span>
+
+        <span>
+            <i class="fas fa-robot"></i>
+            Sensory Assistant
+        </span>
+
         <i class="fas fa-times" onclick="toggleChat()"></i>
+
     </div>
+
     <div class="chat-body" id="chat-body">
-        <div class="message msg-bot">Hello! Ask me about ideal conditions for autism sensory needs.</div>
+
+        <div class="message msg-bot">
+
+            Hello! Ask me about ideal conditions for autism sensory needs.
+
+        </div>
+
     </div>
+
     <div class="chat-input-area">
-        <input type="text" id="chat-input" class="chat-input" placeholder="Type a question..." onkeydown="handleEnter(event)">
-        <button class="chat-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+
+        <input
+            type="text"
+            id="chat-input"
+            class="chat-input"
+            placeholder="Type a question..."
+            onkeydown="handleEnter(event)"
+        >
+
+        <button class="chat-send" onclick="sendMessage()">
+
+            <i class="fas fa-paper-plane"></i>
+
+        </button>
+
     </div>
+
 </div>
 
 <script>
@@ -848,6 +944,7 @@ const sensorChart = new Chart(ctx, {
         room1ScoreData.push(data.score);
         if (chartLabels.length > 10) { chartLabels.shift(); room1ScoreData.shift(); }
         updateComfortAnalysis(data, score);
+        updateNotifications("Room 1", data);
         updateBestRoomRecommendation();
         sensorChart.update();
     });
@@ -888,15 +985,16 @@ const sensorChart = new Chart(ctx, {
 
         statusText2.style.color = color2;
         scoreRing2.style.background = `conic-gradient(${color2} ${score2}%, var(--surface-2) 0%)`;
+
+        if (room2ScoreData.length >= chartLabels.length) {
+
+         room2ScoreData.shift();
+         }
+
         room2ScoreData.push(score2);
-
-if (room2ScoreData.length > 10) {
-
-    room2ScoreData.shift();
-}
-
-updateBestRoomRecommendation();
-sensorChart.update();
+        updateNotifications("Room 2", data);
+        updateBestRoomRecommendation();
+        sensorChart.update();
     });
 
     function updateBestRoomRecommendation() {
@@ -933,6 +1031,48 @@ sensorChart.update();
                 `;
             }
         }
+
+        function updateNotifications(roomName, data) {
+
+        const box = document.getElementById('notification-box');
+
+        let warning = "";
+
+        if (data.sound > 1200) {
+
+            warning = `${roomName} sound level too high`;
+        }
+
+        else if (data.temperature > 28) {
+
+            warning = `${roomName} temperature too warm`;
+        }
+
+        else if (data.light > 3500) {
+
+            warning = `${roomName} lighting too bright`;
+        }
+
+        if (warning !== "") {
+
+            box.className = "alert-box alert-bad";
+
+            box.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                Warning: ${warning}
+            `;
+        }
+
+        else {
+
+            box.className = "alert-box alert-good";
+
+            box.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                All rooms currently stable.
+            `;
+        }
+    }
 
     function logout() {
         localStorage.removeItem("loggedIn");
